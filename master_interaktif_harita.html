@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_ec617c0b1cd815d24bb635e0d7efaf76 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_ec617c0b1cd815d24bb635e0d7efaf76" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_ec617c0b1cd815d24bb635e0d7efaf76 = L.map(
+                "map_ec617c0b1cd815d24bb635e0d7efaf76",
+                {
+                    center: [39.822777788888885, 34.75638887777777],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 14,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_88c691376b0c382b5c1355faafd89d51 = L.tileLayer(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                {
+  "minZoom": 0,
+  "maxZoom": 18,
+  "maxNativeZoom": 18,
+  "noWrap": false,
+  "attribution": "Esri World Imagery",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_88c691376b0c382b5c1355faafd89d51.addTo(map_ec617c0b1cd815d24bb635e0d7efaf76);
+        
+    
+            var circle_marker_3c479378a1c19f3b4b4ef365e7fc1371 = L.circleMarker(
+                [39.822777788888885, 34.75638887777777],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_ec617c0b1cd815d24bb635e0d7efaf76);
+        
+    
+        var popup_b43c1916cabe3779b71376281d8cc7c8 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_f6b1150955ff934a158ac7023e61119a = $(`<div id="html_f6b1150955ff934a158ac7023e61119a" style="width: 100.0%; height: 100.0%;">Hedef #1 (Harita: output_hh1.tif) | Skoru: 0.51</div>`)[0];
+                popup_b43c1916cabe3779b71376281d8cc7c8.setContent(html_f6b1150955ff934a158ac7023e61119a);
+            
+        
+
+        circle_marker_3c479378a1c19f3b4b4ef365e7fc1371.bindPopup(popup_b43c1916cabe3779b71376281d8cc7c8)
+        ;
+
+        
+    
+    
+            var circle_marker_585e46659b9b67bb593814f8f843177d = L.circleMarker(
+                [39.83583334444444, 34.822222211111104],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_ec617c0b1cd815d24bb635e0d7efaf76);
+        
+    
+        var popup_8242eaa684033a765eb830ccfdfb96d1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_94a939d164bdc69810d2e0d97b91bfee = $(`<div id="html_94a939d164bdc69810d2e0d97b91bfee" style="width: 100.0%; height: 100.0%;">Hedef #2 (Harita: output_hh.tif) | Skoru: 0.8</div>`)[0];
+                popup_8242eaa684033a765eb830ccfdfb96d1.setContent(html_94a939d164bdc69810d2e0d97b91bfee);
+            
+        
+
+        circle_marker_585e46659b9b67bb593814f8f843177d.bindPopup(popup_8242eaa684033a765eb830ccfdfb96d1)
+        ;
+
+        
+    
+    
+            var circle_marker_e79ee44d6b0de745e8a46b71aa950b09 = L.circleMarker(
+                [39.83611112222221, 34.82999998888888],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_ec617c0b1cd815d24bb635e0d7efaf76);
+        
+    
+        var popup_78d27022151d53ab529b5d45ee21dfee = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1a1facb1c8905a401981dd44209b11f8 = $(`<div id="html_1a1facb1c8905a401981dd44209b11f8" style="width: 100.0%; height: 100.0%;">Hedef #3 (Harita: output_hh.tif) | Skoru: 0.51</div>`)[0];
+                popup_78d27022151d53ab529b5d45ee21dfee.setContent(html_1a1facb1c8905a401981dd44209b11f8);
+            
+        
+
+        circle_marker_e79ee44d6b0de745e8a46b71aa950b09.bindPopup(popup_78d27022151d53ab529b5d45ee21dfee)
+        ;
+
+        
+    
+    
+            var circle_marker_d19a75667c8bd6d8928f498dfb03a088 = L.circleMarker(
+                [39.8413889, 34.812222211111106],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_ec617c0b1cd815d24bb635e0d7efaf76);
+        
+    
+        var popup_d56ae92c23e1c0d71f10a16097420838 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_2b5862fe57497a2bbbe142730c4f95dd = $(`<div id="html_2b5862fe57497a2bbbe142730c4f95dd" style="width: 100.0%; height: 100.0%;">Hedef #4 (Harita: output_hh2.tif) | Skoru: 0.42</div>`)[0];
+                popup_d56ae92c23e1c0d71f10a16097420838.setContent(html_2b5862fe57497a2bbbe142730c4f95dd);
+            
+        
+
+        circle_marker_d19a75667c8bd6d8928f498dfb03a088.bindPopup(popup_d56ae92c23e1c0d71f10a16097420838)
+        ;
+
+        
+    
+    
+            var circle_marker_f841eeb697fb16309f897f6922047ea5 = L.circleMarker(
+                [39.8413889, 34.793888877777775],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.8, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 8, "stroke": true, "weight": 3}
+            ).addTo(map_ec617c0b1cd815d24bb635e0d7efaf76);
+        
+    
+        var popup_c7423d676e40bf9fc8cee605a1411eea = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_a5652f1c5995e73019e560465a23d615 = $(`<div id="html_a5652f1c5995e73019e560465a23d615" style="width: 100.0%; height: 100.0%;">Hedef #5 (Harita: output_hh2.tif) | Skoru: 0.36</div>`)[0];
+                popup_c7423d676e40bf9fc8cee605a1411eea.setContent(html_a5652f1c5995e73019e560465a23d615);
+            
+        
+
+        circle_marker_f841eeb697fb16309f897f6922047ea5.bindPopup(popup_c7423d676e40bf9fc8cee605a1411eea)
+        ;
+
+        
+    
+</script>
+</html>

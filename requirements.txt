@@ -1,0 +1,5 @@
+streamlit
+matplotlib
+pystac-client
+planetary-computer
+rasterio

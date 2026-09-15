@@ -1,0 +1,85 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    34.75638887777777,
+                    39.822777788888885
+                ]
+            },
+            "properties": {
+                "id": 1,
+                "source_file": "output_hh1.tif",
+                "circularity": 0.51,
+                "confidence": 9.01
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    34.822222211111104,
+                    39.83583334444444
+                ]
+            },
+            "properties": {
+                "id": 2,
+                "source_file": "output_hh.tif",
+                "circularity": 0.8,
+                "confidence": 3.72
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    34.82999998888888,
+                    39.83611112222221
+                ]
+            },
+            "properties": {
+                "id": 3,
+                "source_file": "output_hh.tif",
+                "circularity": 0.51,
+                "confidence": 4.89
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    34.812222211111106,
+                    39.8413889
+                ]
+            },
+            "properties": {
+                "id": 4,
+                "source_file": "output_hh2.tif",
+                "circularity": 0.42,
+                "confidence": 4.26
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    34.793888877777775,
+                    39.8413889
+                ]
+            },
+            "properties": {
+                "id": 5,
+                "source_file": "output_hh2.tif",
+                "circularity": 0.36,
+                "confidence": 3.21
+            }
+        }
+    ]
+}
