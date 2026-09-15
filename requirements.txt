@@ -3,3 +3,4 @@ matplotlib
 pystac-client
 planetary-computer
 rasterio
+google-generativeai
