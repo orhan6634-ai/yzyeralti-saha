@@ -14,18 +14,24 @@ import numpy as np
 from PIL import Image
 import random
 
+# ==========================================
+# GÜVENLİ GEMİNİ API BAĞLANTISI (ST.SECRETS)
+# ==========================================
 import google.generativeai as genai
 
-# Önce bilgisayardaki test için doğrudan anahtarınızı buraya yazabilirsiniz,
-# buluta attığınızda otomatik algılaması için isterse st.secrets kullanabiliriz.
-# 🔑 Doğrudan anahtarınızı buraya yazıyoruz
-GEMINI_API_KEY = "AQ.Ab8RN6LbJjFIFOui4cnVaZ6hEeTOsX3kz8VFiMGGwZw0ot7V9A"
-
-import google.generativeai as genai
-
+ai_model = None
 try:
-    genai.configure(api_key=GEMINI_API_KEY)
-    ai_model = genai.GenerativeModel('gemini-flash')
+    # Önce Streamlit Secrets'tan okumayı dener (Bulut için en güvenlisi)
+    if "GEMINI_API_KEY" in st.secrets:
+        api_key = st.secrets["GEMINI_API_KEY"]
+    else:
+        # Eğer yerelde test ediyorsanız buraya doğrudan anahtarınızı yazabilirsiniz
+        api_key = "BURAYA_API_ANAHTARINIZI_YAZIN"
+
+    if api_key and api_key != "BURAYA_API_ANAHTARINIZI_YAZIN":
+        genai.configure(api_key=api_key)
+        # En kararlı çalışan güncel model tanımlayıcısı
+        ai_model = genai.GenerativeModel('gemini-1.5-flash')
 except Exception as e:
     ai_model = None
 
@@ -40,7 +46,7 @@ st.set_page_config(
 st.title("🏛️ Archaeo-AI-AR Profesyonel Saha Ajanı")
 st.caption("Otonom Arkeolojik Anomali Tespit, Spektral Analiz ve Gemini Destekli Uzman Asistan Paneli")
 
-# GeoJSON Yükleme (Önbelleksiz / Canlı Okuma)
+# GeoJSON Yükleme
 def load_targets():
     if os.path.exists("master_anomaliler.geojson"):
         try:
@@ -93,7 +99,7 @@ else:
 
 st.sidebar.success(f"**Aktif Nokta:** {target_id_str}\n\n**Enlem:** {current_lat:.6f}\n\n**Boylam:** {current_lon:.6f}")
 
-# Klasördeki Dosyaları Otomatik Yakalama
+# Dosya Eşleme
 def get_target_files(tid):
     profile_imgs = glob.glob(f"hedef_{tid}_profil*.png") + glob.glob(f"hedef_{tid}_kesit*.png")
     ndvi_imgs = glob.glob(f"hedef_{tid}_spektral*.png") + glob.glob(f"hedef_{tid}_ndvi*.png")
@@ -116,17 +122,17 @@ with tab1:
     st.subheader("💬 Kıdemli Jeo-Arkeolog Yapay Zeka Danışmanı")
     st.write(f"Şu an **{target_id_str}** konumundasınız (Enlem: `{current_lat}`, Boylam: `{current_lon}`).")
     
-    if GEMINI_API_KEY == "BURAYA_API_ANAHTARINIZI_YAZIN":
-        st.error("⚠️ Lütfen koddaki `GEMINI_API_KEY` değişkenine kendi gerçek Google AI Studio anahtarınızı yazın!")
+    if ai_model is None:
+        st.error("⚠️ Gemini API anahtarı bulunamadı veya yapılandırılamadı! Lütfen Streamlit Secrets paneline veya koda anahtarınızı ekleyin.")
 
     # Otonom Profesyonel Risk Raporu
     if st.button("📊 Kapsamlı Arkeolojik Risk ve Anomali Raporu Oluştur"):
-        if ai_model and GEMINI_API_KEY != "BURAYA_API_ANAHTARINIZI_YAZIN":
+        if ai_model:
             with st.spinner("Gemini profesyonel veri tabanı üzerinden özgün rapor hazırlıyor..."):
                 seed_val = random.randint(1000, 9999)
                 prompt_text = f"""
                 [Analiz Kimliği: {seed_val}]
-                Sen kıdemli bir jeo-arkeolog ve uzaktan algılama (remote sensing) uzmanısın. 
+                Sen kıdemli bir jeo-arkeolog ve uzaktan algılama uzmanısın. 
                 Şu an coğrafi olarak {target_id_str} konumunda (Enlem: {current_lat}, Boylam: {current_lon}) saha incelemesi yapıyorsun.
                 Bu koordinattaki anomali noktası için TAMAMEN ÖZGÜN, ezbere dayalı olmayan, bu konuma ve rastgele analiz ID'sine ({seed_val}) özel teknik bir ön değerlendirme raporu hazırla.
                 Rapor şu başlıkları içersin:
@@ -143,11 +149,11 @@ with tab1:
                 except Exception as e:
                     st.error(f"Rapor üretilirken hata oluştu: {e}")
         else:
-            st.error("Geçerli bir API anahtarı girilmediği için yapay zeka raporu üretilemiyor.")
+            st.error("Model aktif olmadığı için rapor üretilemiyor.")
 
     st.markdown("---")
 
-    # Sohbet Geçmişi Yönetimi
+    # Sohbet Geçmişi
     if "messages" not in st.session_state:
         st.session_state.messages = [
             {"role": "assistant", "content": f"Merhaba! Ben Archaeo-AI Uzman Asistanıyım. {target_id_str} bölgesindeki veriler hakkında bana her şeyi sorabilirsiniz."}
@@ -163,7 +169,7 @@ with tab1:
             st.markdown(user_prompt)
 
         with st.chat_message("assistant"):
-            if ai_model and GEMINI_API_KEY != "BURAYA_API_ANAHTARINIZI_YAZIN":
+            if ai_model:
                 with st.spinner("Uzman inceliyor..."):
                     context_prompt = f"""
                     Sen kıdemli bir jeo-arkeologsun. Kullanıcı şu an {target_id_str} (Enlem: {current_lat}, Boylam: {current_lon}) noktasında.
@@ -176,7 +182,7 @@ with tab1:
                     except Exception as e:
                         reply = f"API Bağlantı hatası: {e}"
             else:
-                reply = "Lütfen kodun başına geçerli bir Gemini API anahtarı ekleyin."
+                reply = "Yapay zeka modeli yapılandırılmadı."
 
             st.markdown(reply)
             st.session_state.messages.append({"role": "assistant", "content": reply})
@@ -188,92 +194,25 @@ with tab2:
     else:
         st.info("Bu hedef için kaydedilmiş NDVI haritası bulunamadı.")
 
-    st.markdown("---")
-    st.markdown("### 🔄 Canlı Uydu Verisi İndir & Analiz Et")
-    buffer_deg = st.slider("Tarama Genişliği (Buffer)", 0.002, 0.015, 0.005, step=0.001)
-
-    if st.button("🚀 Canlı Sentinel-2 Analizini Başlat"):
-        with st.spinner("Planetary Computer STAC üzerinden Sentinel-2 görüntüsü indiriliyor..."):
-            try:
-                import pystac_client
-                import planetary_computer
-                import rasterio
-                from rasterio.windows import from_bounds
-                from rasterio.warp import transform_bounds
-                from rasterio.env import Env
-
-                catalog = pystac_client.Client.open(
-                    "https://planetarycomputer.microsoft.com/api/stac/v1",
-                    modifier=planetary_computer.sign_inplace,
-                )
-                bbox_4326 = [current_lon - buffer_deg, current_lat - buffer_deg, current_lon + buffer_deg, current_lat + buffer_deg]
-                search = catalog.search(
-                    collections=["sentinel-2-l2a"],
-                    bbox=bbox_4326,
-                    query={"eo:cloud_cover": {"lt": 15}},
-                    max_items=1
-                )
-                items = list(search.item_collection())
-                if items:
-                    item = items[0]
-                    st.success(f"📸 Uydu Çekim Tarihi: {item.datetime.strftime('%Y-%m-%d')}")
-                    red_href = item.assets["B04"].href
-                    nir_href = item.assets["B08"].href
-
-                    with Env(CURL_CA_BUNDLE="", GDAL_HTTP_UNSAFESSL="YES", GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR"):
-                        with rasterio.open(red_href) as red_src:
-                            left, bottom, right, top = transform_bounds("EPSG:4326", red_src.crs, *bbox_4326)
-                            window = from_bounds(left, bottom, right, top, transform=red_src.transform)
-                            red = red_src.read(1, window=window).astype(float)
-                        with rasterio.open(nir_href) as nir_src:
-                            nir = nir_src.read(1, window=window).astype(float)
-
-                    ndvi = (nir - red) / (nir + red + 1e-10)
-
-                    fig, ax = plt.subplots(figsize=(8, 6))
-                    cax = ax.imshow(ndvi, cmap='YlGn', extent=[bbox_4326[0], bbox_4326[2], bbox_4326[1], bbox_4326[3]])
-                    fig.colorbar(cax, ax=ax, label='NDVI İndeksi')
-                    ax.plot(current_lon, current_lat, 'r*', markersize=16, label=target_id_str)
-                    ax.set_title(f"{target_id_str} - Canlı NDVI Analizi")
-                    ax.set_xlabel("Boylam")
-                    ax.set_ylabel("Enlem")
-                    ax.grid(True, linestyle='--', alpha=0.5)
-                    ax.legend()
-
-                    st.pyplot(fig)
-                    plt.close(fig)
-                else:
-                    st.warning("Bu alan için bulutsuz görüntü bulunamadı.")
-            except Exception as e:
-                st.error(f"Analiz sırasında hata: {e}")
-
 with tab3:
     st.subheader("🔥 Sahadan Termal / Optik Fotoğraf Anomali Tespiti")
-    st.write("Arazide telefonunuzun kamerası veya harici termal kameranızla çektiğiniz arazi/taş yığını fotoğrafını buraya yükleyin.")
-    
     uploaded_file = st.file_uploader("Arazi Fotoğrafı Yükle (JPG, PNG)", type=["jpg", "jpeg", "png"])
-    
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
         col1, col2 = st.columns(2)
-        
         with col1:
             st.image(image, caption="Orijinal Saha Görseli", use_container_width=True)
-            
         with col2:
             st.write("🧠 Yapay Zeka Termal/Isı Gradyan Maskesi")
-            with st.spinner("Isı farkları ve yapı hatları işleniyor..."):
-                img_gray = image.convert("L")
-                arr = np.array(img_gray)
-                
-                fig_t, ax_t = plt.subplots(figsize=(6, 6))
-                cax_t = ax_t.imshow(arr, cmap='inferno')
-                fig_t.colorbar(cax_t, ax=ax_t, label='Isı / Yoğunluk Gradyanı')
-                ax_t.set_title("Termal Anomali Haritası")
-                ax_t.axis('off')
-                
-                st.pyplot(fig_t)
-                plt.close(fig_t)
+            img_gray = image.convert("L")
+            arr = np.array(img_gray)
+            fig_t, ax_t = plt.subplots(figsize=(6, 6))
+            cax_t = ax_t.imshow(arr, cmap='inferno')
+            fig_t.colorbar(cax_t, ax=ax_t, label='Isı / Yoğunluk Gradyanı')
+            ax_t.set_title("Termal Anomali Haritası")
+            ax_t.axis('off')
+            st.pyplot(fig_t)
+            plt.close(fig_t)
             st.success("✅ Anomali kontrast analizi tamamlandı.")
 
 with tab4:
