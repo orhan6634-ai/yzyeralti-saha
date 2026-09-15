@@ -14,15 +14,19 @@ import numpy as np
 from PIL import Image
 import random
 
-# 🔑 BURAYA GOOGLE AI STUDIO'DAN ALDIĞINIZ API ANAHTARINIZI YAZIN
-GEMINI_API_KEY = "AQ.Ab8RN6Jvb6Xj7QztOgCi3atPxgdvPzpsMZvsaU9JtPiL38auYQ"
-
-# Google GenAI Kütüphanesi Entegrasyonu
 import google.generativeai as genai
-if GEMINI_API_KEY != "BURAYA_API_ANAHTARINIZI_YAZIN":
+
+# Önce bilgisayardaki test için doğrudan anahtarınızı buraya yazabilirsiniz,
+# buluta attığınızda otomatik algılaması için isterse st.secrets kullanabiliriz.
+# 🔑 Doğrudan anahtarınızı buraya yazıyoruz
+GEMINI_API_KEY = "AQ.Ab8RN6LbJjFIFOui4cnVaZ6hEeTOsX3kz8VFiMGGwZw0ot7V9A"
+
+import google.generativeai as genai
+
+try:
     genai.configure(api_key=GEMINI_API_KEY)
-    ai_model = genai.GenerativeModel('gemini-1.5-flash')
-else:
+    ai_model = genai.GenerativeModel('gemini-flash')
+except Exception as e:
     ai_model = None
 
 # Mobil/Web Düzeni
