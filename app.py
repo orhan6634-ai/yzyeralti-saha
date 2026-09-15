@@ -12,20 +12,31 @@ import streamlit.components.v1 as components
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+import random
+
+# 🔑 BURAYA GOOGLE AI STUDIO'DAN ALDIĞINIZ API ANAHTARINIZI YAZIN
+GEMINI_API_KEY = "AQ.Ab8RN6Jvb6Xj7QztOgCi3atPxgdvPzpsMZvsaU9JtPiL38auYQ"
+
+# Google GenAI Kütüphanesi Entegrasyonu
+import google.generativeai as genai
+if GEMINI_API_KEY != "BURAYA_API_ANAHTARINIZI_YAZIN":
+    genai.configure(api_key=GEMINI_API_KEY)
+    ai_model = genai.GenerativeModel('gemini-1.5-flash')
+else:
+    ai_model = None
 
 # Mobil/Web Düzeni
 st.set_page_config(
-    page_title="Archaeo-AI-AR Akıllı Saha Ajanı",
-    page_icon="🤖",
+    page_title="Archaeo-AI-AR Profesyonel Saha Ajanı",
+    page_icon="🏛️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-st.title("🤖 Archaeo-AI-AR Akıllı Saha Ajanı")
-st.caption("Otonom Arkeolojik Anomali Tespit, Termal Analiz ve AI Asistan Paneli")
+st.title("🏛️ Archaeo-AI-AR Profesyonel Saha Ajanı")
+st.caption("Otonom Arkeolojik Anomali Tespit, Spektral Analiz ve Gemini Destekli Uzman Asistan Paneli")
 
-# GeoJSON Yükleme
-@st.cache_data
+# GeoJSON Yükleme (Önbelleksiz / Canlı Okuma)
 def load_targets():
     if os.path.exists("master_anomaliler.geojson"):
         try:
@@ -87,9 +98,9 @@ def get_target_files(tid):
 
 p_imgs, n_imgs, m_htmls = get_target_files(target_num)
 
-# Sekmeler (AI Ajan / Sohbet Eklenmiş Hali)
+# Sekmeler
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-    "🤖 AI Saha Asistanı", 
+    "🤖 Gemini Uzman Asistan", 
     "🌿 Spektral NDVI", 
     "🔥 Termal/Saha Foto", 
     "📊 2D Kesit", 
@@ -98,50 +109,73 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 ])
 
 with tab1:
-    st.subheader("💬 Arkeolojik AI Saha Ajanı ile Sohbet & Analiz")
-    st.write(f"Şu an **{target_id_str}** ({current_lat}, {current_lon}) üzerindesiniz. Bu bölge hakkında yapay zeka ajanına soru sorabilir veya otomatik risk analiz raporu üretebilirsiniz.")
+    st.subheader("💬 Kıdemli Jeo-Arkeolog Yapay Zeka Danışmanı")
+    st.write(f"Şu an **{target_id_str}** konumundasınız (Enlem: `{current_lat}`, Boylam: `{current_lon}`).")
     
-    # Otomatik Otonom Risk Skoru Üreteci
-    if st.button("📊 Ajan Otonom Anomali Risk Raporu Üret"):
-        with st.spinner("Yapay zeka ajan verileri tarıyor ve risk skoru hesaplıyor..."):
-            # Coğrafi konuma ve verilere dayalı simüle edilmiş otonom ajan muhakemesi
-            score = np.random.randint(72, 94)
-            st.success(f"🎯 **Otonom Ajan Analiz Sonucu:**")
-            st.write(f"- **Hedef Konum:** {target_id_str} (Lat: {current_lat}, Lon: {current_lon})")
-            st.write(f"- **İnsan Eliyle Yapılmış Yapı / Duvar Kalıntısı Olasılığı:** **%{score}**")
-            st.write(f"- **Gerekçe / Bulgular:** Bölgedeki mikro-topoğrafik yükseklik gradyanı ve bitki örtüsü stres indeksleri (NDVI), normal zemin formasyonundan sapmalar gösteriyor. Çevredeki lineer (doğrusal) formasyonlar olası gömülü yapı izlerine işaret ediyor.")
-            st.markdown("---")
+    if GEMINI_API_KEY == "BURAYA_API_ANAHTARINIZI_YAZIN":
+        st.error("⚠️ Lütfen koddaki `GEMINI_API_KEY` değişkenine kendi gerçek Google AI Studio anahtarınızı yazın!")
+
+    # Otonom Profesyonel Risk Raporu
+    if st.button("📊 Kapsamlı Arkeolojik Risk ve Anomali Raporu Oluştur"):
+        if ai_model and GEMINI_API_KEY != "BURAYA_API_ANAHTARINIZI_YAZIN":
+            with st.spinner("Gemini profesyonel veri tabanı üzerinden özgün rapor hazırlıyor..."):
+                seed_val = random.randint(1000, 9999)
+                prompt_text = f"""
+                [Analiz Kimliği: {seed_val}]
+                Sen kıdemli bir jeo-arkeolog ve uzaktan algılama (remote sensing) uzmanısın. 
+                Şu an coğrafi olarak {target_id_str} konumunda (Enlem: {current_lat}, Boylam: {current_lon}) saha incelemesi yapıyorsun.
+                Bu koordinattaki anomali noktası için TAMAMEN ÖZGÜN, ezbere dayalı olmayan, bu konuma ve rastgele analiz ID'sine ({seed_val}) özel teknik bir ön değerlendirme raporu hazırla.
+                Rapor şu başlıkları içersin:
+                1. Olası Yapısal Tipoloji ve Dönem Analizi
+                2. Mikro-Topoğrafya ve Spektral Beklentiler
+                3. Sahada Önerilen Nokta Jeofizik Yöntemleri
+                4. Koruma ve Risk Durumu
+                Bilimsel, net ve her defasında farklı detaylar içeren özgün bir üslup kullan.
+                """
+                try:
+                    response = ai_model.generate_content(prompt_text)
+                    st.success("🎯 **Özgün Uzman Raporu Tamamlandı:**")
+                    st.markdown(response.text)
+                except Exception as e:
+                    st.error(f"Rapor üretilirken hata oluştu: {e}")
+        else:
+            st.error("Geçerli bir API anahtarı girilmediği için yapay zeka raporu üretilemiyor.")
+
+    st.markdown("---")
 
     # Sohbet Geçmişi Yönetimi
     if "messages" not in st.session_state:
         st.session_state.messages = [
-            {"role": "assistant", "content": f"Merhaba! Ben Archaeo-AI Saha Ajanıyım. Seçtiğiniz {target_id_str} bölgesi veya saha analizi hakkında size nasıl yardımcı olabilirim?"}
+            {"role": "assistant", "content": f"Merhaba! Ben Archaeo-AI Uzman Asistanıyım. {target_id_str} bölgesindeki veriler hakkında bana her şeyi sorabilirsiniz."}
         ]
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    if user_prompt := st.chat_input("Ajanımıza bir şey sorun (Örn: Bu hedefte hangi jeofizik yöntemi önersin?)..."):
+    if user_prompt := st.chat_input("Uzmana profesyonel bir soru sorun..."):
         st.session_state.messages.append({"role": "user", "content": user_prompt})
         with st.chat_message("user"):
             st.markdown(user_prompt)
 
-        # Ajan Yanıt Mantığı
         with st.chat_message("assistant"):
-            with st.spinner("Ajan düşünüyor..."):
-                prompt_lower = user_prompt.lower()
-                if "jeofizik" in prompt_lower or "gpr" in prompt_lower:
-                    reply = f"**{target_id_str}** için en uygun yaklaşım, bu koordinatlarda 1x1 metrelik ızgara (grid) sistemiyle **GPR (Yer Radarı)** ve **Manyetometre** taraması yapmaktır. Yüzeydeki olası taş kalıntıları derinlik kesitiyle netleştirilebilir."
-                elif "risk" in prompt_lower or "olasılık" in prompt_lower:
-                    reply = f"Seçilen {target_id_str} noktasındaki uydu ve topoğrafya verileri incelendiğinde, anomali skorunun **%85 seviyesinde** yüksek olasılık taşıdığı görülmektedir. Sahada taş yığılımlarını ve bitki örtüsü çizgisel farklarını kontrol etmeniz önerilir."
-                elif "termal" in prompt_lower or "foto" in prompt_lower:
-                    reply = "Sahada çektiğiniz termal veya optik fotoğrafları üstteki 'Termal/Saha Foto' sekmesine yükleyerek anlık ısı gradyanı kontrastı elde edebilirsiniz."
-                else:
-                    reply = f"Anladım. **{target_id_str}** ({current_lat}, {current_lon}) konumunu incelemeye devam ediyorum. Sahadaki gözlemlerinizi (taş yoğunluğu, çöküntü vb.) benimle paylaşırsanız modeli güncelleyebiliriz."
-                
-                st.markdown(reply)
-                st.session_state.messages.append({"role": "assistant", "content": reply})
+            if ai_model and GEMINI_API_KEY != "BURAYA_API_ANAHTARINIZI_YAZIN":
+                with st.spinner("Uzman inceliyor..."):
+                    context_prompt = f"""
+                    Sen kıdemli bir jeo-arkeologsun. Kullanıcı şu an {target_id_str} (Enlem: {current_lat}, Boylam: {current_lon}) noktasında.
+                    Kullanıcının Sorusu: {user_prompt}
+                    Lütfen önceden ezberlenmiş kalıplar kullanmadan, doğrudan bu soruya ve koordinata özel, teknik ve akıcı bir arkeolojik yanıt ver.
+                    """
+                    try:
+                        chat_response = ai_model.generate_content(context_prompt)
+                        reply = chat_response.text
+                    except Exception as e:
+                        reply = f"API Bağlantı hatası: {e}"
+            else:
+                reply = "Lütfen kodun başına geçerli bir Gemini API anahtarı ekleyin."
+
+            st.markdown(reply)
+            st.session_state.messages.append({"role": "assistant", "content": reply})
 
 with tab2:
     st.subheader("🛰️ Sentinel-2 Spektral Nem & Bitki İzi (NDVI)")
